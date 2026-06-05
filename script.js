@@ -156,6 +156,12 @@ function mostrarAnalisisMercado() {
 
     const analisis1 = `<strong>${divisa1}:</strong> ${infoMonedas[divisa1].analisis}`;
     const analisis2 = `<strong>${divisa2}:</strong> ${infoMonedas[divisa2].analisis}`;
+
+    // Esta línea debe ir aquí, cerrando la lógica del módulo 5
+    cajaTexto.innerHTML = `<p>${analisis1}</p><p>${analisis2}</p>`;
+} // <-- ¡Faltaba esta llave para cerrar el Módulo 5!
+
+
 // ====================================================================
 // 6. NAVEGACIÓN DEL DASHBOARD
 // ====================================================================
@@ -177,6 +183,4 @@ function mostrarSeccion(idSeccion, botonPresionado) {
 
     // 4. Poner el estilo "activo" solo al botón que se hizo clic
     botonPresionado.classList.add('activa');
-}
-    cajaTexto.innerHTML = `<p>${analisis1}</p><p>${analisis2}</p>`;
 }
