@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Multi-Calculadora</title>
+    <title>Calculadora Pro (Apple Style)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="dashboard">
     <nav class="sidebar">
-        <h2>📊 Panel</h2>
+        <h2> Finanzas</h2>
         <button class="btn-menu activa" onclick="mostrarSeccion('seccion-mates', this)">🧮 Calculadora</button>
         <button class="btn-menu" onclick="mostrarSeccion('seccion-divisas', this)">💱 Divisas Dinámicas</button>
         <button class="btn-menu" onclick="mostrarSeccion('seccion-analisis', this)">📈 Análisis Mercado</button>
+        <button class="btn-menu" onclick="mostrarSeccion('seccion-economia', this)">🌍 Poder Adquisitivo</button>
     </nav>
 
     <main class="contenido">
         
         <section id="seccion-mates" class="seccion visible">
             <h3>Operaciones Básicas</h3>
+            <p class="instruccion">Realiza cálculos rápidos y precisos.</p>
             <div class="tarjeta">
                 <input type="number" id="num1" placeholder="Primer número">
                 <select id="operacion">
@@ -30,40 +32,65 @@
                 </select>
                 <input type="number" id="num2" placeholder="Segundo número">
                 <button class="btn-accion" onclick="ejecutarOperacion()">Calcular</button>
-                <div class="resultado" id="res-mates"></div>
+                <div class="resultado" id="res-mates" style="margin-top: 15px; font-weight: 600; text-align: center;"></div>
             </div>
         </section>
 
         <section id="seccion-divisas" class="seccion">
-            <h3>Conversor Múltiple Automatizado</h3>
-            <p class="instruccion">Escribe un monto en cualquier divisa y el resto se calculará al instante.</p>
+            <h3>Conversor Dinámico</h3>
+            <p class="instruccion">Escribe un monto y todo se calculará mágicamente.</p>
             <div class="tarjeta">
                 <div id="contenedor-matriz-divisas"></div>
-                
                 <button class="btn-accion btn-agregar" onclick="agregarFilaDivisa()">+ Añadir otra divisa</button>
             </div>
         </section>
 
         <section id="seccion-analisis" class="seccion">
-            <h3>Comparador y Análisis</h3>
+            <h3>Comparador de Mercado</h3>
+            <p class="instruccion">Entiende el comportamiento histórico de las monedas.</p>
             <div class="tarjeta">
-                <label>Selecciona dos divisas para analizar su comportamiento:</label>
-                <div class="fila-analisis">
+                <div class="fila-divisa">
                     <select id="analisis-moneda-1">
                         <option value="USD">USD - Dólar</option>
                         <option value="COP">COP - Peso Colombiano</option>
                         <option value="MXN">MXN - Peso Mexicano</option>
-                        <option value="EUR">EUR - Euro</option>
                     </select>
                     <select id="analisis-moneda-2">
-                        <option value="TRY">TRY - Lira Turca</option>
                         <option value="JPY">JPY - Yen Japonés</option>
                         <option value="GBP">GBP - Libra Esterlina</option>
-                        <option value="CNY">CNY - Yuan Chino</option>
+                        <option value="TRY">TRY - Lira Turca</option>
                     </select>
                 </div>
-                <button class="btn-accion" onclick="mostrarAnalisisMercado()">Generar Análisis</button>
-                <div class="resultado analisis-texto" id="texto-analisis"></div>
+                <button class="btn-accion" onclick="mostrarAnalisisMercado()">Analizar</button>
+                <div class="texto-educativo" id="texto-analisis" style="margin-top: 15px;">Selecciona dos monedas arriba.</div>
+            </div>
+        </section>
+
+        <section id="seccion-economia" class="seccion">
+            <h3>Inflación y Poder Adquisitivo</h3>
+            <p class="instruccion">Descubre cómo el costo de vida afecta tu dinero en el mundo real.</p>
+            
+            <div class="tarjeta">
+                <h4>📉 La Trampa de la Inflación y Deflación</h4>
+                <div class="texto-educativo">
+                    <p><strong>Inflación (El dinero pierde valor):</strong> Es cuando los precios de las cosas suben. Si viajas a un país con alta inflación llevando dólares o euros, tu dinero rinde mucho más porque su moneda local vale menos. Sin embargo, para los ciudadanos de ese país, el costo de vida se vuelve asfixiante.</p>
+                    <p><strong>Deflación (El dinero gana valor temporalmente):</strong> Es cuando los precios bajan. Parece algo bueno, pero frena la economía porque la gente deja de comprar esperando que las cosas bajen aún más (pasa en Japón). Las monedas allí son estables, pero el costo de vida para un extranjero suele ser muy alto.</p>
+                </div>
+            </div>
+
+            <div class="tarjeta">
+                <h4>🗺️ Mapa de Salarios Mínimos</h4>
+                <p style="color: #86868B; font-size: 14px;">Compara tu salario mensual para ver a cuántos salarios mínimos equivale en otros países.</p>
+                <div class="fila-divisa">
+                    <input type="number" id="mi-salario" placeholder="Tu salario mensual..." oninput="calcularPoderAdquisitivo()">
+                    <select id="mi-moneda-salario" onchange="calcularPoderAdquisitivo()">
+                        <option value="COP">COP</option>
+                        <option value="MXN">MXN</option>
+                        <option value="USD">USD</option>
+                        <option value="GBP">GBP</option>
+                    </select>
+                </div>
+                <div id="mapa-salarios" class="mapa-grid"></div>
             </div>
         </section>
 
