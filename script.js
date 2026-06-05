@@ -184,3 +184,60 @@ function mostrarSeccion(idSeccion, botonPresionado) {
     // 4. Poner el estilo "activo" solo al botón que se hizo clic
     botonPresionado.classList.add('activa');
 }
+
+// ====================================================================
+// 7. MÓDULO DE ECONOMÍA Y PODER ADQUISITIVO
+// ====================================================================
+
+// Salarios mínimos mensuales promediados (en Dólares USD)
+const salariosMinimosMundo = {
+    "🇨🇴 Colombia": 330,
+    "🇲🇽 México": 440,
+    "🇺🇸 EE.UU.": 1256, // Promedio federal base
+    "🇬🇧 Reino Unido": 1900,
+    "🇯🇵 Japón": 1100,
+    "🇹🇷 Turquía": 500
+};
+
+function calcularPoderAdquisitivo() {
+    const salarioIngresado = parseFloat(document.getElementById('mi-salario').value);
+    const moneda = document.getElementById('mi-moneda-salario').value;
+    const contenedorMapa = document.getElementById('mapa-salarios');
+
+    // Limpiar si el usuario borra el número
+    if (isNaN(salarioIngresado) || salarioIngresado <= 0) {
+        contenedorMapa.innerHTML = "";
+        return;
+    }
+
+    // 1. Convertimos el salario ingresado a USD reales según la API
+    const tasaOrigen = tasasDeCambio[moneda];
+    if(!tasaOrigen) return; // Si la API aún no carga, no hace nada
+    
+    const miSalarioEnUSD = salarioIngresado / tasaOrigen;
+
+    // 2. Generamos el HTML del mapa dinámicamente
+    let htmlMapa = '';
+    
+    for (let pais in salariosMinimosMundo) {
+        const salarioMinimoDelPais = salariosMinimosMundo[pais];
+        
+        // Fórmula: ¿Cuántas veces cabe el salario mínimo del país en mi salario?
+        const equivalencia = (miSalarioEnUSD / salarioMinimoDelPais).toFixed(1);
+        
+        // Colores Apple (Verde si tienes más poder adquisitivo, Rojo si tienes menos)
+        const colorEstado = equivalencia >= 1 ? '#34C759' : '#FF3B30'; 
+        
+        htmlMapa += `
+            <div class="tarjeta-pais">
+                <h5>${pais}</h5>
+                <p>Mínimo local: $${salarioMinimoDelPais} USD</p>
+                <p style="color: ${colorEstado}; font-weight: 600; margin-top: 10px;">
+                    Equivale a ${equivalencia}x salarios aquí.
+                </p>
+            </div>
+        `;
+    }
+    
+    contenedorMapa.innerHTML = htmlMapa;
+}
