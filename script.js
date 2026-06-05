@@ -1,4 +1,4 @@
-// ====== MÓDULO DE OPERACIONES NORMALES ======
+// ====== LÓGICA MATEMÁTICA ======
 function calcular(operacion, num1, num2) {
     switch (operacion) {
         case 'suma': return num1 + num2;
@@ -11,32 +11,64 @@ function calcular(operacion, num1, num2) {
     }
 }
 
-// ====== MÓDULO DE DIVISAS (API) ======
-// Usaremos una URL de una API de tasas de cambio respaldada por GitHub para que siempre funcione online
+// Vinculación con la pantalla web
+function ejecutarOperacion() {
+    const n1 = parseFloat(document.getElementById('num1').value);
+    const n2 = parseFloat(document.getElementById('num2').value);
+    const op = document.getElementById('operacion').value;
+    const pantallaResultado = document.getElementById('res-mates');
+
+    if (isNaN(n1) || (isNaN(n2))) {
+        pantallaResultado.innerText = "Escribe ambos números";
+        return;
+    }
+
+    const resultado = calcular(op, n1, n2);
+    pantallaResultado.innerText = `Resultado: ${resultado}`;
+}
+
+
+// ====== LÓGICA DE DIVISAS (API TIEMPO REAL) ======
 const API_URL = "https://open.er-api.com/v6/latest/USD"; 
 
 async function convertirDivisa(monto, deDivisa, aDivisa) {
     try {
-        // 1. Llamamos a la API para obtener los cambios actuales basados en el Dólar (USD)
         const respuesta = await fetch(API_URL);
         const datos = await respuesta.json();
         
         if (datos.result === "success") {
-            // 2. Obtenemos las tasas de cambio de las dos monedas elegidas
             const tasaDe = datos.rates[deDivisa];
             const tasaA = datos.rates[aDivisa];
             
-            // 3. Convertimos el monto (Fórmula: (Monto / Tasa de origen) * Tasa de destino)
+            // Operación de conversión indexada al USD
             const resultado = (monto / tasaDe) * tasaA;
-            return resultado.toFixed(2); // Retorna el número con 2 decimales
+            
+            // Formateo inteligente: si es Yen o Won no usa decimales, para las demás usa 2.
+            const decimales = (aDivisa === 'JPY' || aDivisa === 'KRW') ? 0 : 2;
+            return resultado.toFixed(decimales);
         } else {
-            throw new Error("No se pudieron obtener las tasas de cambio.");
+            throw new Error("Error en los datos de la API");
         }
     } catch (error) {
-        console.error("Error en la conversión:", error);
-        return "Error de conexión";
+        console.error(error);
+        return "Error de red";
     }
 }
 
-// Ejemplo de uso interno (para probar en consola):
-// convertirDivisa(100, "EUR", "MXN").then(res => console.log(`100 EUR son: ${res} MXN`));
+// Vinculación con la pantalla web
+async function ejecutarConversion() {
+    const monto = parseFloat(document.getElementById('monto').value);
+    const de = document.getElementById('de-divisa').value;
+    const a = document.getElementById('a-divisa').value;
+    const pantallaResultado = document.getElementById('res-divisas');
+
+    if (isNaN(monto) || monto <= 0) {
+        pantallaResultado.innerText = "Ingresa un monto válido";
+        return;
+    }
+
+    pantallaResultado.innerText = "Buscando tasas en vivo...";
+    
+    const resultado = await convertirDivisa(monto, de, a);
+    pantallaResultado.innerText = `${monto} ${de} = ${resultado} ${a}`;
+}
