@@ -156,6 +156,27 @@ function mostrarAnalisisMercado() {
 
     const analisis1 = `<strong>${divisa1}:</strong> ${infoMonedas[divisa1].analisis}`;
     const analisis2 = `<strong>${divisa2}:</strong> ${infoMonedas[divisa2].analisis}`;
+// ====================================================================
+// 6. NAVEGACIÓN DEL DASHBOARD
+// ====================================================================
+function mostrarSeccion(idSeccion, botonPresionado) {
+    // 1. Ocultar todas las secciones
+    const secciones = document.querySelectorAll('.seccion');
+    secciones.forEach(seccion => {
+        seccion.classList.remove('visible');
+    });
 
+    // 2. Mostrar solo la sección solicitada
+    document.getElementById(idSeccion).classList.add('visible');
+
+    // 3. Quitar el estilo de "activo" a todos los botones del menú
+    const botones = document.querySelectorAll('.btn-menu');
+    botones.forEach(boton => {
+        boton.classList.remove('activa');
+    });
+
+    // 4. Poner el estilo "activo" solo al botón que se hizo clic
+    botonPresionado.classList.add('activa');
+}
     cajaTexto.innerHTML = `<p>${analisis1}</p><p>${analisis2}</p>`;
 }
